@@ -1,0 +1,14 @@
+
+# Start the Roadmap backend before sending requests.
+# Floci must be running with the Roadmap DynamoDB tables.
+
+@api = http://localhost:3001
+
+### Health check - Expect HTTP 200
+GET {{api}}/health
+
+### Read categories from DynamoDB - Expect HTTP 200 and seven items
+GET {{api}}/api/categories
+
+### Unknown endpoint - Expect HTTP 404
+GET {{api}}/api/unknown
