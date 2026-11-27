@@ -1,7 +1,7 @@
 // Starts the Roadmap Service (S1) on its own port (independent process).
 require('dotenv').config({ quiet: true });
 process.env.SERVICE_NAME = process.env.SERVICE_NAME || 'roadmap';
-const { logger } = require('./shared');
+const { logger } = require('../shared');
 const app = require('./app');
 
 logger.setServiceName(process.env.SERVICE_NAME);
@@ -11,7 +11,8 @@ async function start() {
     const { startSecurityLog } = require('./services/cloudwatch');
     await startSecurityLog(process.env.CLOUDWATCH_LOG_GROUP);
   }
-  const server = app.listen(port, () => logger.info('SERVICE_STARTED', { port, pid: process.pid }));
+  const host = process.env.HOST || '127.0.0.1';
+  const server = app.listen(port, host, () => logger.info('SERVICE_STARTED', { port, pid: process.pid }));
   for (const signal of ['SIGINT', 'SIGTERM']) {
     process.on(signal, () => server.close(() => process.exit(0)));
   }

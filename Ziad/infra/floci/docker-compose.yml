@@ -6,7 +6,7 @@ name: roadmaphub-floci
 
 services:
   floci:
-    image: floci/floci:latest
+    image: floci/floci:2.5.0
     container_name: floci
     ports:
       - "127.0.0.1:4566:4566"                  # only your own PC can reach Floci

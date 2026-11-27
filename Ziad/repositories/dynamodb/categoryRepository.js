@@ -1,7 +1,7 @@
 // Fixed category list (table roadhub-categories, seeded by infra/scripts/create-tables.sh).
 // It almost never changes, so it is cached for 60 s instead of read on every request.
 const { ScanCommand, GetCommand } = require('@aws-sdk/lib-dynamodb');
-const { dynamo } = require('../../shared');
+const { dynamo } = require('../../../shared');
 const config = require('../../config');
 
 let cached = null;

@@ -1,0 +1,16 @@
+**/node_modules
+**/.git
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+**/*.log
+**/.run
+**/tests
+**/infra
+**/docs
+**/*.zip
+frontend
+
+**/build
+**/infra/.out

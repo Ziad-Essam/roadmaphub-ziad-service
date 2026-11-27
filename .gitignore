@@ -11,6 +11,8 @@ node_modules/
 
 # Local runtime files
 logs/
+**/infra/.out/
+**/build/
 *.log
 .run/
 evidence/raw/
@@ -20,3 +22,12 @@ k6/results/*.json
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Local test and demo outputs
+**/.run/
+
+# Local Compose overrides and exported k6 reports
+/compose.test.yml
+/compose.demo.yml
+/single-replica.html
+/three-replicas.html

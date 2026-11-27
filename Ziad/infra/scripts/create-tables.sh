@@ -6,21 +6,21 @@ source "$(dirname "$0")/../lib.sh"
 step "DynamoDB tables: roadmap-service"
 
 # boardStatus is set only on public (not merged) requests -> a "sparse" index that holds exactly the board cards.
-make_table "$PREFIX-features" \
+make_table "${FEATURES_TABLE:-$PREFIX-features}" \
   --attribute-definitions AttributeName=featureId,AttributeType=S AttributeName=boardStatus,AttributeType=S \
     AttributeName=createdAt,AttributeType=S AttributeName=voteCount,AttributeType=N AttributeName=authorId,AttributeType=S \
   --key-schema AttributeName=featureId,KeyType=HASH \
   --global-secondary-indexes "[$(gsi status-created-index boardStatus createdAt),$(gsi status-votes-index boardStatus voteCount),$(gsi author-index authorId createdAt)]"
-make_table "$PREFIX-categories" \
+make_table "${CATEGORIES_TABLE:-$PREFIX-categories}" \
   --attribute-definitions AttributeName=categoryId,AttributeType=S \
   --key-schema AttributeName=categoryId,KeyType=HASH
 
 step "Extra settings"
-point_in_time_recovery "$PREFIX-features"
+point_in_time_recovery "${FEATURES_TABLE:-$PREFIX-features}"
 
 step "Seed the fixed category list"
 while IFS='|' read -r id name order; do
-  awsl dynamodb put-item --table-name "$PREFIX-categories" --item \
+  awsl dynamodb put-item --table-name "${CATEGORIES_TABLE:-$PREFIX-categories}" --item \
     "{\"categoryId\":{\"S\":\"$id\"},\"name\":{\"S\":\"$name\"},\"sortOrder\":{\"N\":\"$order\"}}" >/dev/null
   ok "category $id"
 done <<'CATS'

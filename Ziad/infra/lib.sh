@@ -5,15 +5,20 @@ export AWS_REGION="${AWS_REGION:-us-east-1}"
 export AWS_DEFAULT_REGION="$AWS_REGION"
 export AWS_ENDPOINT_URL="${AWS_ENDPOINT_URL:-http://localhost:4566}"
 # Floci accepts any keys; these are not secrets.
-export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID:-test}"
-export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY:-test}"
+export AWS_ACCESS_KEY_ID=test
+export AWS_SECRET_ACCESS_KEY=test
+unset AWS_SESSION_TOKEN AWS_PROFILE AWS_DEFAULT_PROFILE
 export AWS_PAGER=""
 export MSYS_NO_PATHCONV=1          # stop Git Bash turning /aws/... into C:/Program Files/Git/aws/...
 export ACCOUNT_ID="000000000000"
 export PREFIX="roadhub"
 
 # awsl = aws pointed at Floci (same idea as Lab 8)
-awsl() { aws --endpoint-url "$AWS_ENDPOINT_URL" --region "$AWS_REGION" "$@"; }
+awsl() {
+  case "$AWS_ENDPOINT_URL" in http://localhost:4566|http://127.0.0.1:4566) ;; *) fail "Local Floci endpoint required" >&2; return 1;; esac
+  [ "$AWS_REGION" = us-east-1 ] || { fail "Use us-east-1 for the local team account" >&2; return 1; }
+  aws --endpoint-url "$AWS_ENDPOINT_URL" --region "$AWS_REGION" "$@"
+}
 
 ok()   { printf '  \033[32mOK\033[0m    %s\n' "$*"; }
 info() { printf '  \033[36m...\033[0m   %s\n' "$*"; }
