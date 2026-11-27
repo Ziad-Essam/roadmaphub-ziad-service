@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const { http } = require('../shared');
 const publicRoutes = require('./routes/public');
+const internalRoutes = require('./routes/internal');
 
 const app = express();
 app.disable('x-powered-by');
@@ -17,6 +18,9 @@ app.use(http.securityHeaders);  // nosniff, DENY frames, CSP for JSON answers
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', service: 'roadmap', pid: process.pid, port: Number(process.env.PORT) || 3001 });
 });
+
+// Internal routes: called by the other services only (service token required, no CORS)
+app.use('/internal/features', express.json({ limit: '32kb' }), internalRoutes);
 
 // Public API: browser calls through the gateway
 const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:4566,http://localhost:8080')

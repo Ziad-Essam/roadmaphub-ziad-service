@@ -1,14 +1,39 @@
-
-# Start the Roadmap backend before sending requests.
-# Floci must be running with the Roadmap DynamoDB tables.
-
+# Open this file in VS Code with REST Client, then click "Send Request".
+# Start server.js first. Categories and roadmap also need Floci + seeded tables.
 @api = http://localhost:3001
 
-### Health check - Expect HTTP 200
+### Express is listening. Expect 200 and service "roadmap".
 GET {{api}}/health
 
-### Read categories from DynamoDB - Expect HTTP 200 and seven items
+### Read seeded categories. Expect 200 and seven items.
 GET {{api}}/api/categories
 
-### Unknown endpoint - Expect HTTP 404
-GET {{api}}/api/unknown
+### Board, newest first. Expect 200 and four named columns.
+GET {{api}}/api/roadmap?sort=newest
+
+### Filter one column. Its items array may be empty.
+GET {{api}}/api/features?status=under_review&category=ui-ux
+
+### Status is required for a single column. Expect 400.
+GET {{api}}/api/features
+
+### Creating a request requires login. Expect 401.
+POST {{api}}/api/features
+Content-Type: application/json
+
+{
+  "title": "Export roadmap",
+  "description": "Download the public roadmap as a file.",
+  "categoryId": "reporting"
+}
+
+### My submissions. Set userJwt in the private REST Client environment.
+GET {{api}}/api/me/features
+Authorization: Bearer {{userJwt}}
+
+### Decline an Under Review request. Supply private adminJwt and a test featureId locally.
+PATCH {{api}}/api/features/{{featureId}}/status
+Authorization: Bearer {{adminJwt}}
+Content-Type: application/json
+
+{"status":"declined","reason":"Outside this product's scope"}

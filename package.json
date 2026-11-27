@@ -5,6 +5,7 @@
   "description": "RoadmapHub - Roadmap Service (S1)",
   "scripts": {
     "start": "npm --prefix Ziad start",
+    "test": "npm --prefix Ziad test",
     "setup:tables": "npm --prefix Ziad run setup:tables"
   },
   "engines": {
