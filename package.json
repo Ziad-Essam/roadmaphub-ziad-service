@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npm --prefix Ziad start",
     "test": "npm --prefix Ziad test",
-    "setup:tables": "npm --prefix Ziad run setup:tables"
+    "setup:tables": "npm --prefix Ziad run setup:tables",
+    "worker": "npm --prefix Ziad run worker"
   },
   "engines": {
     "node": ">=20"
